@@ -1,0 +1,29 @@
+{
+  "name": "@nylas/nylas-js",
+  "version": "0.1.0",
+  "description": "JavaScript SDK for the Nylas Platform API",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "typescript": "^4.7.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nylas/nylas-js.git"
+  },
+  "keywords": [
+    "email",
+    "contacts",
+    "calendar",
+    "nylas"
+  ],
+  "author": "Nylas, Inc.",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nylas/nylas-js/issues"
+  },
+  "homepage": "https://github.com/nylas/nylas-js#readme"
+}

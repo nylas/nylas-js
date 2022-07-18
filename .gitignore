@@ -31,6 +31,9 @@ build/
 # Build dirs for FaaS systems (e.g. AWS Lambda)
 fn_build/
 
+# Ignore the output folder of the compiled TypeScript code
+lib
+
 
 ###### Python #####
 # Ignore common virtualenv names
