@@ -10,6 +10,13 @@ export interface PostOptions {
 }
 
 export default class Request {
+  /**
+   * Make a GET request
+   * @param url The URL to make the GET call to
+   * @param headers Additional headers to set for the call
+   * @return The raw response object
+   * @throws If the HTTP response code is non 2xx
+   */
   static async get({ url, headers }: GetOptions): Promise<Response> {
     return await fetch(url, {
       method: 'GET',
@@ -24,6 +31,14 @@ export default class Request {
     });
   }
 
+  /**
+   * Make a POST request
+   * @param url The URL to make the POST call to
+   * @param body The JSON body to send
+   * @param headers Additional headers to set for the call
+   * @return The raw response object
+   * @throws If the HTTP response code is non 2xx
+   */
   static async post({ url, body, headers }: PostOptions): Promise<Response> {
     return await fetch(url, {
       method: 'POST',
@@ -39,6 +54,12 @@ export default class Request {
     });
   }
 
+  /**
+   * Checks if the response HTTP code is an error code, and if so, throws an error
+   * @param response The raw response object
+   * @throws If the HTTP response code is non 2xx
+   * @private
+   */
   private static _handleErrorResponse(response: Response): void {
     if (response.status > 299) {
       response.text().then((text) => {
