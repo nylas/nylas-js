@@ -1,26 +1,26 @@
 enum DefaultEndpoints {
   GenerateAuthUrl = '/nylas/generate-auth-url',
-  ExchangeMailboxToken = '/nylas/exchange-mailbox-token'
+  ExchangeMailboxToken = '/nylas/exchange-mailbox-token',
 }
 
 export interface NylasProps {
-  serverBaseUrl: string
+  serverBaseUrl: string;
 }
 
 export interface AuthUrlOptions {
-  successRedirectUrl: string,
-  emailAddress?: string,
-  generateAuthUrlEndpoint?: string,
-  onConnectionError?: (error: Error) => void
+  successRedirectUrl: string;
+  emailAddress?: string;
+  generateAuthUrlEndpoint?: string;
+  onConnectionError?: (error: Error) => void;
 }
 
 export interface ExchangeCodeOptions {
-  exchangeCodeForTokenEndpoint?: string,
-  onConnectionError?: (error: Error) => void
+  exchangeCodeForTokenEndpoint?: string;
+  onConnectionError?: (error: Error) => void;
 }
 
 export default class Nylas {
-  serverBaseUrl: string
+  serverBaseUrl: string;
 
   constructor(props: NylasProps) {
     this.serverBaseUrl = props.serverBaseUrl;
@@ -30,8 +30,7 @@ export default class Nylas {
     try {
       const url =
         this.serverBaseUrl +
-        (opts.generateAuthUrlEndpoint ||
-          DefaultEndpoints.GenerateAuthUrl)
+        (opts.generateAuthUrlEndpoint || DefaultEndpoints.GenerateAuthUrl);
       const rawResp = await fetch(url, {
         method: 'POST',
         headers: {
@@ -41,11 +40,11 @@ export default class Nylas {
           email_address: opts.emailAddress,
           success_url: opts.successRedirectUrl,
         }),
-      })
+      });
 
       return await rawResp.text();
     } catch (e: any) {
-      console.warn(`Error fetching auth URL:`, e)
+      console.warn(`Error fetching auth URL:`, e);
       opts.onConnectionError && opts.onConnectionError(e);
       return false;
     }
@@ -53,23 +52,26 @@ export default class Nylas {
 
   async authWithRedirect(opts: AuthUrlOptions): Promise<void | boolean> {
     const authUrl = await this.buildAuthUrl(opts);
-    if(authUrl !== false && typeof authUrl === 'string') {
+    if (authUrl !== false && typeof authUrl === 'string') {
       window.location.href = authUrl;
     }
 
     return false;
   }
 
-  async exchangeCodeForToken(authorizationCode: string, opts?: ExchangeCodeOptions): Promise<string | boolean> {
+  async exchangeCodeForToken(
+    authorizationCode: string,
+    opts?: ExchangeCodeOptions
+  ): Promise<string | boolean> {
     try {
       if (!authorizationCode) {
-        return false
+        return false;
       }
 
       const url =
         this.serverBaseUrl +
         (opts?.exchangeCodeForTokenEndpoint ||
-          DefaultEndpoints.ExchangeMailboxToken)
+          DefaultEndpoints.ExchangeMailboxToken);
       const rawResp = await fetch(url, {
         method: 'POST',
         headers: {
@@ -78,21 +80,23 @@ export default class Nylas {
         body: JSON.stringify({
           token: authorizationCode,
         }),
-      })
-      return await rawResp.text()
+      });
+      return await rawResp.text();
     } catch (e: any) {
-      console.warn(`Error exchanging mailbox token:`, e)
-      opts?.onConnectionError && opts.onConnectionError(e)
-      return false
+      console.warn(`Error exchanging mailbox token:`, e);
+      opts?.onConnectionError && opts.onConnectionError(e);
+      return false;
     }
   }
 
-  async exchangeCodeFromUrlForToken(opts?: ExchangeCodeOptions): Promise<string | boolean> {
+  async exchangeCodeFromUrlForToken(
+    opts?: ExchangeCodeOptions
+  ): Promise<string | boolean> {
     const authorizationCode = new URLSearchParams(window.location.search).get(
       'code'
     );
     if (!authorizationCode) {
-      return false
+      return false;
     }
 
     return await this.exchangeCodeForToken(authorizationCode, opts);
