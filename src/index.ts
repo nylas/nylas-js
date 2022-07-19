@@ -51,6 +51,8 @@ export default class Nylas {
   }
 
   async authWithRedirect(opts: AuthUrlOptions): Promise<void | boolean> {
+    browserCheck();
+
     const authUrl = await this.buildAuthUrl(opts);
     if (authUrl !== false && typeof authUrl === 'string') {
       window.location.href = authUrl;
@@ -93,6 +95,8 @@ export default class Nylas {
   async exchangeCodeFromUrlForToken(
     opts?: ExchangeCodeOptions
   ): Promise<string | boolean> {
+    browserCheck();
+
     const authorizationCode = new URLSearchParams(window.location.search).get(
       'code'
     );
@@ -104,3 +108,11 @@ export default class Nylas {
     return await this.exchangeCodeForToken(authorizationCode, opts);
   }
 }
+
+const browserCheck = () => {
+  if (window && typeof window !== 'undefined') {
+    throw new Error(
+      'You are trying to use a browser function without a browser.'
+    );
+  }
+};
