@@ -1,3 +1,5 @@
+import Request from './request';
+
 enum DefaultEndpoints {
   GenerateAuthUrl = '/nylas/generate-auth-url',
   ExchangeMailboxToken = '/nylas/exchange-mailbox-token',
@@ -31,15 +33,12 @@ export default class Nylas {
       const url =
         this.serverBaseUrl +
         (opts.generateAuthUrlEndpoint || DefaultEndpoints.GenerateAuthUrl);
-      const rawResp = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      const rawResp = await Request.post({
+        url,
+        body: {
           email_address: opts.emailAddress,
           success_url: opts.successRedirectUrl,
-        }),
+        },
       });
 
       return await rawResp.text();
@@ -75,14 +74,11 @@ export default class Nylas {
         this.serverBaseUrl +
         (opts?.exchangeCodeForTokenEndpoint ||
           DefaultEndpoints.ExchangeMailboxToken);
-      const rawResp = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      const rawResp = await Request.post({
+        url,
+        body: {
           token: authorizationCode,
-        }),
+        },
       });
       return await rawResp.text();
     } catch (e: any) {
