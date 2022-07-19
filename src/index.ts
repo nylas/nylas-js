@@ -27,25 +27,17 @@ export default class Nylas {
   }
 
   async buildAuthUrl(opts: AuthUrlOptions): Promise<string> {
-    let authUrl = '';
-    try {
-      const url =
-        this.serverBaseUrl +
-        (opts.generateAuthUrlEndpoint || DefaultEndpoints.GenerateAuthUrl);
-      const rawResp = await Request.post({
-        url,
-        body: {
-          email_address: opts.emailAddress,
-          success_url: opts.successRedirectUrl,
-        },
-      });
-
-      authUrl = await rawResp.text();
-    } catch (e: any) {
-      console.warn(`Error fetching auth URL:`, e);
-      throw e;
-    }
-
+    const url =
+      this.serverBaseUrl +
+      (opts.generateAuthUrlEndpoint || DefaultEndpoints.GenerateAuthUrl);
+    const rawResp = await Request.post({
+      url,
+      body: {
+        email_address: opts.emailAddress,
+        success_url: opts.successRedirectUrl,
+      },
+    });
+    const authUrl = await rawResp.text();
     if (!authUrl || authUrl.length == 0) {
       throw new Error('No auth URL was returned from the server.');
     }
@@ -67,24 +59,17 @@ export default class Nylas {
       throw new Error('No valid authorization code detected');
     }
 
-    let accessToken = '';
-    try {
-      const url =
-        this.serverBaseUrl +
-        (opts?.exchangeCodeForTokenEndpoint ||
-          DefaultEndpoints.ExchangeMailboxToken);
-      const rawResp = await Request.post({
-        url,
-        body: {
-          token: authorizationCode,
-        },
-      });
-      accessToken = await rawResp.text();
-    } catch (e: any) {
-      console.warn(`Error exchanging the code for an access token:`, e);
-      throw e;
-    }
-
+    const url =
+      this.serverBaseUrl +
+      (opts?.exchangeCodeForTokenEndpoint ||
+        DefaultEndpoints.ExchangeMailboxToken);
+    const rawResp = await Request.post({
+      url,
+      body: {
+        token: authorizationCode,
+      },
+    });
+    const accessToken = await rawResp.text();
     if (!accessToken || accessToken.length == 0) {
       throw new Error('No access token was returned from the server.');
     }
