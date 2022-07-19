@@ -65,7 +65,7 @@ export default class Nylas {
   ): Promise<string | boolean> {
     try {
       if (!authorizationCode) {
-        console.warn("No valid authorization code detected")
+        console.warn('No valid authorization code detected');
         return false;
       }
 
@@ -97,7 +97,7 @@ export default class Nylas {
       'code'
     );
     if (!authorizationCode) {
-      console.warn("No valid authorization code detected")
+      console.warn('No valid authorization code detected');
       return false;
     }
 
