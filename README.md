@@ -51,6 +51,8 @@ The URL of the backend server configured with the Nylas middleware or Nylas rout
 
 ## 💙 Contributing
 
+Interested in contributing to the Nylas JavaScript SDK project? Thanks so much for your interest! We are always looking for improvements to the project and contributions from open-source developers are greatly appreciated.
+
 Please refer to [Contributing](Contributing.md) for information about how to make contributions to this project. We welcome questions, bug reports, and pull requests.
 
 ## 📝 License
