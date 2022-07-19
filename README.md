@@ -2,7 +2,7 @@
 
 ![npm](https://img.shields.io/npm/v/@nylas/nylas-js)
 
-This is the GitHub repository for the Nylas JavaScript SDK. The Nylas Communications Platform provides REST APIs for [Email](https://developer.nylas.com/docs/connectivity/email/), [Calendar](https://developer.nylas.com/docs/connectivity/calendar/), and [Contacts](https://developer.nylas.com/docs/connectivity/contacts/), and the Node SDK is the quickest way to build your integration using JavaScript.
+This is the GitHub repository for the Nylas JavaScript SDK. The Nylas Communications Platform provides REST APIs for [Email](https://developer.nylas.com/docs/connectivity/email/), [Calendar](https://developer.nylas.com/docs/connectivity/calendar/), and [Contacts](https://developer.nylas.com/docs/connectivity/contacts/), and the Nylas Javascript SDK is the quickest way to build your integration using JavaScript.
 
 Here are some resources to help you get started:
 
