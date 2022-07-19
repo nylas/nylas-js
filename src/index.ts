@@ -13,12 +13,10 @@ export interface AuthUrlOptions {
   successRedirectUrl: string;
   emailAddress?: string;
   generateAuthUrlEndpoint?: string;
-  onConnectionError?: (error: Error) => void;
 }
 
 export interface ExchangeCodeOptions {
   exchangeCodeForTokenEndpoint?: string;
-  onConnectionError?: (error: Error) => void;
 }
 
 export default class Nylas {
@@ -28,7 +26,8 @@ export default class Nylas {
     this.serverBaseUrl = props.serverBaseUrl;
   }
 
-  async buildAuthUrl(opts: AuthUrlOptions): Promise<string | boolean> {
+  async buildAuthUrl(opts: AuthUrlOptions): Promise<string> {
+    let authUrl = '';
     try {
       const url =
         this.serverBaseUrl +
@@ -41,35 +40,35 @@ export default class Nylas {
         },
       });
 
-      return await rawResp.text();
+      authUrl = await rawResp.text();
     } catch (e: any) {
       console.warn(`Error fetching auth URL:`, e);
-      opts.onConnectionError && opts.onConnectionError(e);
-      return false;
+      throw e;
     }
+
+    if (!authUrl || authUrl.length == 0) {
+      throw new Error('No auth URL was returned from the server.');
+    }
+
+    return authUrl;
   }
 
-  async authWithRedirect(opts: AuthUrlOptions): Promise<void | boolean> {
+  async authWithRedirect(opts: AuthUrlOptions): Promise<void> {
     browserCheck();
 
-    const authUrl = await this.buildAuthUrl(opts);
-    if (authUrl !== false && typeof authUrl === 'string') {
-      window.location.href = authUrl;
-    }
-
-    return false;
+    window.location.href = await this.buildAuthUrl(opts);
   }
 
   async exchangeCodeForToken(
     authorizationCode: string,
     opts?: ExchangeCodeOptions
-  ): Promise<string | boolean> {
-    try {
-      if (!authorizationCode) {
-        console.warn('No valid authorization code detected');
-        return false;
-      }
+  ): Promise<string> {
+    if (!authorizationCode) {
+      throw new Error('No valid authorization code detected');
+    }
 
+    let accessToken = '';
+    try {
       const url =
         this.serverBaseUrl +
         (opts?.exchangeCodeForTokenEndpoint ||
@@ -80,27 +79,27 @@ export default class Nylas {
           token: authorizationCode,
         },
       });
-      return await rawResp.text();
+      accessToken = await rawResp.text();
     } catch (e: any) {
-      console.warn(`Error exchanging mailbox token:`, e);
-      opts?.onConnectionError && opts.onConnectionError(e);
-      return false;
+      console.warn(`Error exchanging the code for an access token:`, e);
+      throw e;
     }
+
+    if (!accessToken || accessToken.length == 0) {
+      throw new Error('No access token was returned from the server.');
+    }
+
+    return accessToken;
   }
 
   async exchangeCodeFromUrlForToken(
     opts?: ExchangeCodeOptions
-  ): Promise<string | boolean> {
+  ): Promise<string> {
     browserCheck();
 
     const authorizationCode = new URLSearchParams(window.location.search).get(
       'code'
     );
-    if (!authorizationCode) {
-      console.warn('No valid authorization code detected');
-      return false;
-    }
-
     return await this.exchangeCodeForToken(authorizationCode, opts);
   }
 }
