@@ -4,8 +4,12 @@
   "description": "JavaScript SDK for the Nylas Platform API",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
   "scripts": {
     "build": "tsc",
+    "prepare": "npm run build",
     "lint": "eslint --ext .js,.ts -f visualstudio .",
     "lint:fix": "npm run lint -- --fix",
     "lint:ci": "npm run lint:fix -- --quiet",
