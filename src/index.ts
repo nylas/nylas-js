@@ -144,7 +144,7 @@ export default class Nylas {
  * @throws If window is not defined
  */
 const browserCheck = () => {
-  if (window && typeof window !== 'undefined') {
+  if (typeof window !== 'undefined') {
     throw new Error(
       'You are trying to use a browser function without a browser.'
     );
