@@ -24,11 +24,7 @@ export default class Request {
         ...headers,
         Accept: 'application/json',
       },
-    }).then((response) => {
-      this._handleErrorResponse(response);
-
-      return response;
-    });
+    }).then(this._handleErrorResponse);
   }
 
   /**
@@ -47,11 +43,7 @@ export default class Request {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(body),
-    }).then((response) => {
-      this._handleErrorResponse(response);
-
-      return response;
-    });
+    }).then(this._handleErrorResponse);
   }
 
   /**
@@ -60,7 +52,7 @@ export default class Request {
    * @throws If the HTTP response code is non 2xx
    * @private
    */
-  private static _handleErrorResponse(response: Response): void {
+  private static _handleErrorResponse(response: Response): Response {
     if (response.status > 299) {
       response.text().then((text) => {
         return new Error(
@@ -68,5 +60,7 @@ export default class Request {
         );
       });
     }
+
+    return response;
   }
 }
