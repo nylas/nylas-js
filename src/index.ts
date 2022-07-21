@@ -53,7 +53,7 @@ export default class Nylas {
    * @throws If the HTTP response code is non 2xx
    * @throws If the server doesn't respond with a URL
    */
-  async buildAuthUrl(opts: AuthUrlOptions): Promise<string> {
+  buildAuthUrl = async (opts: AuthUrlOptions): Promise<string> => {
     const url =
       this.serverBaseUrl +
       (opts.buildAuthUrlEndpoint || DefaultEndpoints.buildAuthUrl);
@@ -70,7 +70,7 @@ export default class Nylas {
     }
 
     return authUrl;
-  }
+  };
 
   /**
    * Builds and redirects to the URL for authenticating users to your application via Hosted Authentication
@@ -79,11 +79,11 @@ export default class Nylas {
    * @throws If the HTTP response code is non 2xx
    * @throws If the server doesn't respond with a URL
    */
-  async authWithRedirect(opts: AuthUrlOptions): Promise<void> {
+  authWithRedirect = async (opts: AuthUrlOptions): Promise<void> => {
     browserCheck();
 
     window.location.href = await this.buildAuthUrl(opts);
-  }
+  };
 
   /**
    * Exchange the Nylas authorization code for a Nylas access token
@@ -93,10 +93,10 @@ export default class Nylas {
    * @throws If the HTTP response code is non 2xx
    * @throws If the server doesn't respond with an access token
    */
-  async exchangeCodeForToken(
+  exchangeCodeForToken = async (
     authorizationCode: string,
     opts?: ExchangeCodeOptions
-  ): Promise<string> {
+  ): Promise<string> => {
     if (!authorizationCode) {
       throw new Error('No valid authorization code detected');
     }
@@ -117,7 +117,7 @@ export default class Nylas {
     }
 
     return accessToken;
-  }
+  };
 
   /**
    * Parses the URL for the Nylas authorization code for a Nylas access token
@@ -127,16 +127,16 @@ export default class Nylas {
    * @throws If the HTTP response code is non 2xx
    * @throws If the server doesn't respond with an access token
    */
-  async exchangeCodeFromUrlForToken(
+  exchangeCodeFromUrlForToken = async (
     opts?: ExchangeCodeOptions
-  ): Promise<string> {
+  ): Promise<string> => {
     browserCheck();
 
     const authorizationCode = new URLSearchParams(window.location.search).get(
       'code'
     );
     return await this.exchangeCodeForToken(authorizationCode, opts);
-  }
+  };
 }
 
 /**
@@ -144,7 +144,7 @@ export default class Nylas {
  * @throws If window is not defined
  */
 const browserCheck = () => {
-  if (typeof window !== 'undefined') {
+  if (typeof window === 'undefined') {
     throw new Error(
       'You are trying to use a browser function without a browser.'
     );
