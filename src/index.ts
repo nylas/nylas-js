@@ -105,18 +105,25 @@ export default class Nylas {
       this.serverBaseUrl +
       (opts?.exchangeCodeForTokenEndpoint ||
         DefaultEndpoints.exchangeCodeForToken);
-    const rawResp = await Request.post({
-      url,
-      body: {
-        token: authorizationCode,
-      },
-    });
-    const accessToken = await rawResp.text();
-    if (!accessToken || accessToken.length == 0) {
-      throw new Error('No access token was returned from the server.');
-    }
 
-    return accessToken;
+    try {
+      const rawResp = await Request.post({
+        url,
+        body: {
+          token: authorizationCode,
+        },
+      });
+
+      const accessToken = await rawResp.text();
+
+      if (!accessToken || accessToken.length == 0) {
+        throw new Error('No access token was returned from the server.');
+      }
+
+      return accessToken;
+    } catch (err) {
+      throw new Error(err);
+    }
   };
 
   /**
