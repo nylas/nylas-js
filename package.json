@@ -16,13 +16,23 @@
     "lint:prettier": "prettier --write '**/*.{ts,js}'",
     "lint:prettier:check": "prettier --check '**/*.{ts,js}'"
   },
+  "moduleResolution": "node",
   "devDependencies": {
+    "@types/jwt-decode": "^3.1.0",
+    "@types/uuid": "^8.3.4",
     "@typescript-eslint/eslint-plugin": "^5.30.7",
+    "@typescript-eslint/parser": "^5.30.0",
     "eslint": "^8.20.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
     "prettier": "^2.7.1",
     "typescript": "^4.7.4"
+  },
+  "dependencies": {
+    "buffer": "^6.0.3",
+    "js-sha256": "^0.9.0",
+    "jwt-decode": "^3.1.2",
+    "uuid": "^9.0.0"
   },
   "repository": {
     "type": "git",
