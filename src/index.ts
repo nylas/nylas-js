@@ -1,5 +1,4 @@
 import Request from './request';
-
 enum DefaultEndpoints {
   buildAuthUrl = '/nylas/generate-auth-url',
   exchangeCodeForToken = '/nylas/exchange-mailbox-token',
